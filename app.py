@@ -1,18 +1,13 @@
-
 from flask import Flask, render_template, request
 from datetime import datetime, timezone
+
 from werkzeug.utils import redirect
 from flask_config import Config
 from data.database import initialise_database, add_order, clear_orders, count_orders, get_orders_to_display, get_queued_count, get_recently_placed_count, get_recently_processed_count
 from scheduled_jobs import initialise_scheduled_jobs
 from products import create_product_download
-from azure.monitor.opentelemetry import configure_azure_monitor
-
 import requests
-import logging
-logging.basicConfig(level=logging.INFO)
-configure_azure_monitor()
-import flask
+
 app = Flask(__name__)
 app.config.from_object(Config)
 
@@ -78,14 +73,6 @@ def set_scenario():
     response.raise_for_status()
 
     return redirect('/')
-
-@app.route("/exception")
-def exception():
-    raise Exception("Hit an exception")
-
-@app.route("/ignore")
-def ignore():
-    return "Request received but not tracked."
 
 if __name__ == "__main__":
     app.run()
