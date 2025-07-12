@@ -12,6 +12,7 @@ import requests
 import logging
 logging.basicConfig(level=logging.INFO)
 configure_azure_monitor()
+import flask
 app = Flask(__name__)
 app.config.from_object(Config)
 
@@ -77,6 +78,14 @@ def set_scenario():
     response.raise_for_status()
 
     return redirect('/')
+
+@app.route("/exception")
+def exception():
+    raise Exception("Hit an exception")
+
+@app.route("/ignore")
+def ignore():
+    return "Request received but not tracked."
 
 if __name__ == "__main__":
     app.run()
