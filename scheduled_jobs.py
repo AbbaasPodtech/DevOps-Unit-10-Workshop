@@ -33,9 +33,11 @@ def process_orders(app):
             app.config["FINANCE_PACKAGE_URL"] + "/ProcessPayment",
             json=payload
         )
-
-        response.raise_for_status()
-
+        app.logger.info("Response form endpoint: " + response.text)
+        try:
+            response.raise_for_status()
+        except:
+            app.logger.exception("Error processing order {id}".format(id = order.id))
         order.set_as_processed()
         save_order(order)
 
