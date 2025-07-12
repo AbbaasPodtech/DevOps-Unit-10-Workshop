@@ -34,14 +34,10 @@ def process_orders(app):
             json=payload
         )
 
-    try:
         response.raise_for_status()
+
         order.set_as_processed()
         save_order(order)
-    except requests.exceptions.HTTPError as e:
-        # Log the error and mark order as failed to prevent infinite retry
-        print(f"Failed to process order {order.id}: {e}")
-        # Either skip this order or implement retry logic with limits
 
 def get_queue_of_orders_to_process():
     allOrders = get_all_orders()
